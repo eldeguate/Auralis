@@ -241,6 +241,10 @@
   </div>
 </section>
 
+<script>
+  window.AURALIS_CHAT_ENDPOINT = "https://awytafjpzovrexswkeup.supabase.co/functions/v1/chat";
+  window.AURALIS_SUPABASE_ANON_KEY = "sb_publishable_GLDmQxjeON0FX9rt0-YWow_LUMPDOOp";
+</script>
 <script src="assets/shared.js"></script>
 <script src="assets/data.js"></script>
 <script>
@@ -303,56 +307,83 @@ function setQuick(options) {
   });
 }
 
-const SYSTEM_PROMPT = `You are the AURALIS sound consultant — a warm, knowledgeable craftsperson helping a customer find their bespoke hi-fi speaker. You work for AURALIS, a small-batch speaker workshop in Antigua Guatemala that builds speakers by hand from Central American tonewoods using Mayan woodworking traditions.
-
-VOICE:
-- Warm, grounded, specific — like a luthier talking about their work. Never salesy.
-- Concise: 2–4 short sentences per message. One question at a time.
-- Sensory language for sound: texture, warmth, space, weight, air. Like a sommelier describing wine.
-- Reference Mayan heritage and Guatemalan origin with specificity, never as decoration.
-- Use "we" (the workshop) and address the customer directly.
-
-FLOW — guide through these steps in order, but conversationally (don't robotically announce step numbers):
-1. THE ROOM — room size (small/medium/large), shape, flooring, acoustic challenges, placement.
-2. LISTENING STYLE — nearfield desk? sofa across room? background? critical focus? late-night low volume? loud?
-3. MUSIC & SOURCES — genres, favorite artists, vinyl vs digital vs streaming.
-4. EXISTING SYSTEM — amp? DAC? turntable? streamer? budget? starting fresh or upgrading?
-5. RECOMMENDATION — suggest 1–2 specific AURALIS speakers with a personalized "why" tied to their answers. Reference the wood's acoustic character naturally.
-6. ORDER — if they want to proceed, collect: full name, email, shipping city/country, confirm model + price, customization notes. Close with: "The workshop will follow up within two business days with a formal invoice and shipping timeline."
-
-CATALOG — memorize this:
-
-K'UHUL ($5,200 / pair) — Floor-Standing Tower, Hormigo wood. 2×6.5" Kevlar + 1" Beryllium. 28Hz–40kHz, 91dB, 4Ω, 20–300W, 58lbs. Hand-rubbed resin. Commanding, warm, authoritative. Large living rooms, dedicated listening rooms, home theater. Hormigo is the sacred marimba tonewood — warm resonant lows, singing sustain.
-
-IXCHEL ($2,400 / pair) — Bookshelf Monitor, Granadillo wood. 5.25" paper woofer + 0.75" silk dome. 45Hz–35kHz, 87dB, 6Ω, 15–150W, 19lbs. Oiled satin. Intimate, revealing, tight controlled midrange. Studies, bedrooms, small apartments, desktops. Granadillo is the "blood wood" — dense, precise imaging.
-
-BALAM ($7,800 / pair) — Open-Baffle Dipole Flagship, Conacaste wood. 2×8" Alnico full-range + ribbon super-tweeter. 32Hz–45kHz, 94dB, 8Ω, 8–200W, 52lbs. French polish. Three-dimensional soundstage, speakers disappear. Audiophile rooms, vinyl, jazz, classical. Conacaste is the "ear tree" — light, rigid, acoustically transparent.
-
-TZ'IKIN ($1,800 / pair) — Powered Desktop Monitor, Cocobolo wood. 4" aluminum + AMT tweeter. 55Hz–38kHz. Built-in 2×50W Class D (no amp needed). 13lbs. Tung oil. Bright, articulate, harmonic complexity. Desktop, small rooms, vinyl+digital hybrid. Cocobolo is royal tonewood — dense, oily, self-dampening.
-
-When you reach step 5 (recommendation), briefly tie: wood character → room/music → why it sings for them.
-
-Never invent specs or other products. Keep replies to 2–4 sentences. One question at a time.`;
+function addStreamingAssistantBubble() {
+  const el = document.createElement('div');
+  el.className = 'msg assistant';
+  el.innerHTML = `
+    <div class="meta">AURALIS</div>
+    <div class="bubble"></div>
+  `;
+  chatBody.appendChild(el);
+  chatBody.scrollTop = chatBody.scrollHeight;
+  return el.querySelector('.bubble');
+}
 
 async function callClaude(userText) {
   messages.push({ role: 'user', content: userText });
   showTyping();
   statusEl.textContent = 'Thinking';
+
   try {
-    const reply = await window.claude.complete({
-      system: SYSTEM_PROMPT,
-      messages: messages
+    const res = await fetch(window.AURALIS_CHAT_ENDPOINT, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': window.AURALIS_SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${window.AURALIS_SUPABASE_ANON_KEY}`,
+      },
+      body: JSON.stringify({ messages }),
     });
-    messages.push({ role: 'assistant', content: reply });
-    hideTyping();
+
+    if (!res.ok || !res.body) {
+      const errText = await res.text().catch(() => '');
+      throw new Error(`Chat failed (${res.status}) ${errText}`);
+    }
+
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+    let assistantText = '';
+    let bubble = null;
+
+    while (true) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+
+      const lines = buffer.split('\n');
+      buffer = lines.pop() || '';
+
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        const payload = line.slice(6).trim();
+        if (!payload) continue;
+        const evt = JSON.parse(payload);
+        if (evt.text) {
+          if (!bubble) {
+            hideTyping();
+            bubble = addStreamingAssistantBubble();
+            statusEl.textContent = 'Speaking';
+          }
+          assistantText += evt.text;
+          bubble.textContent = assistantText;
+          chatBody.scrollTop = chatBody.scrollHeight;
+        } else if (evt.error) {
+          throw new Error(evt.error);
+        }
+      }
+    }
+
+    if (!assistantText) throw new Error('Empty response');
+    messages.push({ role: 'assistant', content: assistantText });
     statusEl.textContent = 'Ready';
-    addMsg('assistant', reply);
-    inferStep(reply);
+    inferStep(assistantText);
   } catch (err) {
     hideTyping();
     statusEl.textContent = 'Error';
     addMsg('assistant', "Sorry — the line dropped for a moment. Could you say that again?");
     console.error(err);
+    messages.pop();
   }
 }
 
@@ -385,9 +416,9 @@ document.getElementById('begin').addEventListener('click', async () => {
   document.getElementById('chat-input-row').style.display = 'flex';
   setStep('room');
 
-  // First assistant message — pre-written for snappy UX
+  // Greeting is shown locally only — not in messages[] because the
+  // API requires conversation to start from the user's side.
   const greeting = "Welcome. I'm the AURALIS consultant — I'll help you find the speaker that fits your room and the way you actually listen.\n\nLet's start with the room. How large is the space — a cozy study, a mid-size living room, or something larger? And is it open-plan, or a defined room?";
-  messages.push({ role: 'assistant', content: greeting });
   addMsg('assistant', greeting);
   setQuick(['Small study', 'Mid-size living room', 'Large / open-plan', 'Dedicated listening room']);
   chatInput.focus();
