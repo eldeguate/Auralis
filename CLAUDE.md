@@ -95,6 +95,18 @@ This is the most complex page. Key behaviours:
 - **Limits:** max 30 messages, max 4000 chars per message
 - Streams SSE events: `{text}` for tokens, `{done, usage}` on completion, `{error}` on failure
 
+### System prompt structure
+
+The system prompt is a single cached block (`cache_control: { type: "ephemeral" }`) organized top-to-bottom as:
+
+1. `<role>` — sales-expert persona, craftsman-engineer voice, no-hallucination policy, custom-commission fallback, unspecified-field discipline.
+2. `<catalog>` — the four Auralis models with specs. **Placeholder policy:** any spec marked `TODO: verify` is awaiting workshop measurement. The assistant must describe those attributes qualitatively only ("moderate sensitivity", "extends into the mid-30-hertz range") and never quote the placeholder number as a published spec. Prices, model names, wood species, and lead time (6–8 weeks) are fixed and may be stated directly.
+3. `<decision_rules>` — explicit if/then mapping from client profile to model, with hard-constraint overrides (amp type, placement) and a fallback to the custom commission.
+4. `<intake_schema>` — internal scratchpad of canonical client-profile fields. Missing values are tracked as the literal `"unspecified"` internally and never printed or spoken to the user.
+5. `<output_contract>` — prose-only SSE output rules, sentence-length targets per step, recommendation format, redirects for discount/shipping/out-of-scope questions.
+
+The chat UI, step logic, quick-replies, and `inferStep()` in `consultation.html` depend on the existing SSE wire format only — changes to prompt content must preserve the `{text}` / `{done,usage}` / `{error}` event shape.
+
 ### Deploying the Edge Function
 ```bash
 supabase functions deploy chat --project-ref awytafjpzovrexswkeup
