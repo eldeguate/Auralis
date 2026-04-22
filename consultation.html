@@ -1,0 +1,398 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Find Your Sound — AURALIS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500&family=Libre+Baskerville:ital,wght@0,400;1,400&family=IBM+Plex+Mono:wght@300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+.page-hero { padding: 160px var(--pad) 40px; max-width: var(--max); margin: 0 auto; }
+.page-hero h1 { font-size: clamp(44px, 6vw, 88px); font-weight: 200; letter-spacing: -0.01em; line-height: 1.02; max-width: 16ch; }
+.page-hero .sub { font-family: var(--f-serif); font-style: italic; font-size: clamp(18px, 1.5vw, 22px); color: var(--stone); margin-top: 28px; max-width: 52ch; line-height: 1.6; }
+
+.consult-layout {
+  max-width: var(--max); margin: 0 auto; padding: 0 var(--pad) 120px;
+  display: grid;
+  grid-template-columns: 1fr 2.2fr;
+  gap: 40px;
+  align-items: start;
+}
+@media (max-width: 900px) { .consult-layout { grid-template-columns: 1fr; } }
+
+/* Side panel */
+.side-panel {
+  position: sticky; top: 100px;
+  background: var(--parchment);
+  border: 1px solid rgba(47,54,64,0.08);
+  padding: 32px;
+}
+.side-panel h3 { font-family: var(--f-display); font-weight: 300; font-size: 20px; margin-bottom: 20px; }
+.steps-list { list-style: none; }
+.steps-list li {
+  display: flex; gap: 14px; padding: 14px 0;
+  border-bottom: 1px solid rgba(47,54,64,0.06);
+}
+.steps-list li:last-child { border-bottom: 0; }
+.steps-list .sidx {
+  font-family: var(--f-mono); font-size: 11px;
+  letter-spacing: 0.18em; color: var(--ash);
+  min-width: 22px;
+}
+.steps-list .slabel { font-size: 14px; color: var(--stone); line-height: 1.5; }
+.steps-list li.active .slabel { color: var(--slate); }
+.steps-list li.active .sidx { color: var(--teal); }
+.steps-list li.done .slabel { color: var(--stone); }
+.steps-list li.done .sidx { color: var(--teal-deep); }
+.steps-list li.done .sidx::before { content: '✓ '; }
+
+.trust-note {
+  font-family: var(--f-mono); font-size: 10px;
+  letter-spacing: 0.18em; color: var(--ash);
+  text-transform: uppercase; margin-top: 28px;
+  padding-top: 20px; border-top: 1px solid rgba(47,54,64,0.08);
+  line-height: 1.8;
+}
+
+/* Chat */
+.chat-shell {
+  background: var(--parchment);
+  border: 1px solid rgba(47,54,64,0.08);
+  display: flex; flex-direction: column;
+  min-height: 640px;
+  max-height: 80vh;
+}
+.chat-header {
+  display: flex; align-items: center; gap: 12px;
+  padding: 20px 28px;
+  border-bottom: 1px solid rgba(47,54,64,0.08);
+  background: var(--cream);
+}
+.chat-header svg { width: 32px; height: 32px; color: var(--teal); }
+.chat-header .ctitle { font-family: var(--f-display); font-weight: 300; font-size: 16px; letter-spacing: 0.12em; }
+.chat-header .cstatus { font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.18em; color: var(--jade); text-transform: uppercase; margin-left: auto; display: flex; align-items: center; gap: 8px; }
+.chat-header .cstatus::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--jade); box-shadow: 0 0 0 3px rgba(90,140,111,0.25); }
+
+.chat-body {
+  flex: 1; overflow-y: auto;
+  padding: 28px;
+  display: flex; flex-direction: column;
+  gap: 18px;
+}
+.chat-body::-webkit-scrollbar { width: 6px; }
+.chat-body::-webkit-scrollbar-thumb { background: rgba(47,54,64,0.15); border-radius: 3px; }
+
+.msg { max-width: 80%; display: flex; flex-direction: column; gap: 6px; animation: slideIn 0.35s ease; }
+@keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+.msg .meta { font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.2em; color: var(--ash); text-transform: uppercase; }
+.msg .bubble {
+  padding: 14px 18px;
+  font-size: 15px;
+  line-height: 1.6;
+  border-radius: 2px;
+  white-space: pre-wrap;
+}
+.msg.assistant { align-self: flex-start; }
+.msg.assistant .bubble { background: var(--cream); color: var(--slate); border: 1px solid rgba(47,54,64,0.08); }
+.msg.assistant .meta { color: var(--teal-deep); }
+.msg.user { align-self: flex-end; }
+.msg.user .bubble { background: var(--slate); color: var(--cream); }
+.msg.user .meta { text-align: right; }
+
+.typing {
+  display: flex; gap: 4px; padding: 14px 18px;
+  background: var(--cream);
+  border: 1px solid rgba(47,54,64,0.08);
+  align-self: flex-start;
+  border-radius: 2px;
+}
+.typing span {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--teal);
+  animation: bounce 1.4s infinite;
+}
+.typing span:nth-child(2) { animation-delay: 0.2s; }
+.typing span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes bounce {
+  0%, 60%, 100% { opacity: 0.3; transform: translateY(0); }
+  30% { opacity: 1; transform: translateY(-4px); }
+}
+
+.chat-quick {
+  display: flex; flex-wrap: wrap; gap: 8px;
+  padding: 0 28px 8px;
+}
+.quick-btn {
+  font-family: var(--f-display);
+  font-size: 13px; font-weight: 300;
+  padding: 8px 14px;
+  border: 1px solid rgba(47,54,64,0.15);
+  color: var(--slate);
+  background: transparent;
+  border-radius: 999px;
+  transition: all 0.2s;
+}
+.quick-btn:hover { background: var(--slate); color: var(--cream); border-color: var(--slate); }
+
+.chat-input-row {
+  display: flex; gap: 12px;
+  padding: 20px 28px;
+  border-top: 1px solid rgba(47,54,64,0.08);
+  background: var(--cream);
+}
+.chat-input {
+  flex: 1;
+  font-family: var(--f-display); font-size: 15px; font-weight: 300;
+  padding: 14px 16px;
+  border: 1px solid rgba(47,54,64,0.15);
+  background: var(--parchment);
+  color: var(--slate);
+  outline: none;
+  transition: border-color 0.2s;
+}
+.chat-input:focus { border-color: var(--teal); }
+.chat-send {
+  padding: 0 24px;
+  background: var(--teal);
+  color: var(--cream);
+  font-family: var(--f-mono); font-size: 12px;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  transition: background 0.2s;
+  border-radius: 2px;
+}
+.chat-send:hover { background: var(--teal-deep); }
+.chat-send:disabled { background: var(--ash); cursor: not-allowed; }
+
+/* Intro state */
+.intro-card {
+  padding: 60px 40px;
+  text-align: center;
+  max-width: 520px; margin: auto;
+}
+.intro-card svg { width: 64px; height: 64px; color: var(--teal); margin: 0 auto 28px; }
+.intro-card h2 { font-size: clamp(30px, 3.4vw, 42px); font-weight: 200; letter-spacing: -0.005em; line-height: 1.1; margin-bottom: 18px; text-wrap: balance; }
+.intro-card p { margin: 0 auto 32px; font-size: 16px; line-height: 1.7; }
+</style>
+</head>
+<body>
+
+<section class="page-hero">
+  <div class="eyebrow reveal">§ Find Your Sound</div>
+  <h1 class="reveal">Let us curate your sound.</h1>
+  <p class="sub reveal">
+    A brief conversation about your room, your music, and the way you actually listen. Ten
+    minutes. One recommendation. Built for your life, not a showroom.
+  </p>
+</section>
+
+<section>
+  <div class="consult-layout">
+    <aside class="side-panel reveal">
+      <h3>Six steps</h3>
+      <ol class="steps-list" id="step-list">
+        <li data-step="room"><span class="sidx">01</span><span class="slabel">The Room</span></li>
+        <li data-step="listen"><span class="sidx">02</span><span class="slabel">Listening Style</span></li>
+        <li data-step="music"><span class="sidx">03</span><span class="slabel">Music &amp; Sources</span></li>
+        <li data-step="system"><span class="sidx">04</span><span class="slabel">Existing System</span></li>
+        <li data-step="rec"><span class="sidx">05</span><span class="slabel">Recommendation</span></li>
+        <li data-step="order"><span class="sidx">06</span><span class="slabel">Order Summary</span></li>
+      </ol>
+      <div class="trust-note">
+        Your conversation stays between you and our consultant. A real person from the workshop
+        follows up within two business days.
+      </div>
+    </aside>
+
+    <div class="chat-shell reveal" id="chat-shell">
+      <div class="chat-header">
+        <svg viewBox="0 0 40 40" fill="none">
+          <rect x="1.5" y="1.5" width="37" height="37" rx="7" stroke="currentColor" stroke-width="1.6"/>
+          <path d="M8 15 Q14 11 20 15 T32 15" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+          <path d="M8 21 Q14 17 20 21 T32 21" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+          <path d="M8 27 Q14 23 20 27 T32 27" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+        </svg>
+        <div class="ctitle">AURALIS · SOUND CONSULTANT</div>
+        <div class="cstatus" id="c-status">Ready</div>
+      </div>
+      <div class="chat-body" id="chat-body">
+        <div class="intro-card" id="intro-card">
+          <svg viewBox="0 0 40 40" fill="none">
+            <rect x="1.5" y="1.5" width="37" height="37" rx="7" stroke="currentColor" stroke-width="1.6"/>
+            <path d="M8 15 Q14 11 20 15 T32 15" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <path d="M8 21 Q14 17 20 21 T32 21" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+            <path d="M8 27 Q14 23 20 27 T32 27" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+          </svg>
+          <h2>Ten minutes. Your room, your records, a recommendation.</h2>
+          <p class="mute">
+            Our consultant will ask about your space, the way you listen, and the music you love —
+            then suggest the AURALIS speaker built for your life. Start whenever you're ready.
+          </p>
+          <button class="btn btn-primary" id="begin">Begin Consultation <span class="arrow">→</span></button>
+        </div>
+      </div>
+      <div class="chat-quick" id="chat-quick" style="display:none;"></div>
+      <div class="chat-input-row" id="chat-input-row" style="display:none;">
+        <input class="chat-input" id="chat-input" placeholder="Type your answer…" autocomplete="off"/>
+        <button class="chat-send" id="chat-send">Send</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="assets/shared.js"></script>
+<script src="assets/data.js"></script>
+<script>
+AURALIS.initPage('consult');
+
+const chatBody = document.getElementById('chat-body');
+const chatInput = document.getElementById('chat-input');
+const chatSend = document.getElementById('chat-send');
+const chatQuick = document.getElementById('chat-quick');
+const stepList = document.getElementById('step-list');
+const statusEl = document.getElementById('c-status');
+
+const messages = []; // {role, content}
+let currentStep = 'room';
+let typingEl = null;
+
+const STEPS = ['room','listen','music','system','rec','order'];
+
+function setStep(step) {
+  currentStep = step;
+  const idx = STEPS.indexOf(step);
+  stepList.querySelectorAll('li').forEach((li, i) => {
+    li.classList.toggle('active', i === idx);
+    li.classList.toggle('done', i < idx);
+  });
+}
+
+function addMsg(role, content) {
+  const el = document.createElement('div');
+  el.className = 'msg ' + role;
+  el.innerHTML = `
+    <div class="meta">${role === 'assistant' ? 'AURALIS' : 'You'}</div>
+    <div class="bubble"></div>
+  `;
+  el.querySelector('.bubble').textContent = content;
+  chatBody.appendChild(el);
+  chatBody.scrollTop = chatBody.scrollHeight;
+}
+
+function showTyping() {
+  hideTyping();
+  typingEl = document.createElement('div');
+  typingEl.className = 'typing';
+  typingEl.innerHTML = '<span></span><span></span><span></span>';
+  chatBody.appendChild(typingEl);
+  chatBody.scrollTop = chatBody.scrollHeight;
+}
+function hideTyping() { if (typingEl) { typingEl.remove(); typingEl = null; } }
+
+function setQuick(options) {
+  chatQuick.innerHTML = '';
+  if (!options || !options.length) { chatQuick.style.display = 'none'; return; }
+  chatQuick.style.display = 'flex';
+  options.forEach(opt => {
+    const b = document.createElement('button');
+    b.className = 'quick-btn';
+    b.textContent = opt;
+    b.onclick = () => { chatInput.value = opt; sendMessage(); };
+    chatQuick.appendChild(b);
+  });
+}
+
+const SYSTEM_PROMPT = `You are the AURALIS sound consultant — a warm, knowledgeable craftsperson helping a customer find their bespoke hi-fi speaker. You work for AURALIS, a small-batch speaker workshop in Antigua Guatemala that builds speakers by hand from Central American tonewoods using Mayan woodworking traditions.
+
+VOICE:
+- Warm, grounded, specific — like a luthier talking about their work. Never salesy.
+- Concise: 2–4 short sentences per message. One question at a time.
+- Sensory language for sound: texture, warmth, space, weight, air. Like a sommelier describing wine.
+- Reference Mayan heritage and Guatemalan origin with specificity, never as decoration.
+- Use "we" (the workshop) and address the customer directly.
+
+FLOW — guide through these steps in order, but conversationally (don't robotically announce step numbers):
+1. THE ROOM — room size (small/medium/large), shape, flooring, acoustic challenges, placement.
+2. LISTENING STYLE — nearfield desk? sofa across room? background? critical focus? late-night low volume? loud?
+3. MUSIC & SOURCES — genres, favorite artists, vinyl vs digital vs streaming.
+4. EXISTING SYSTEM — amp? DAC? turntable? streamer? budget? starting fresh or upgrading?
+5. RECOMMENDATION — suggest 1–2 specific AURALIS speakers with a personalized "why" tied to their answers. Reference the wood's acoustic character naturally.
+6. ORDER — if they want to proceed, collect: full name, email, shipping city/country, confirm model + price, customization notes. Close with: "The workshop will follow up within two business days with a formal invoice and shipping timeline."
+
+CATALOG — memorize this:
+
+K'UHUL ($5,200 / pair) — Floor-Standing Tower, Hormigo wood. 2×6.5" Kevlar + 1" Beryllium. 28Hz–40kHz, 91dB, 4Ω, 20–300W, 58lbs. Hand-rubbed resin. Commanding, warm, authoritative. Large living rooms, dedicated listening rooms, home theater. Hormigo is the sacred marimba tonewood — warm resonant lows, singing sustain.
+
+IXCHEL ($2,400 / pair) — Bookshelf Monitor, Granadillo wood. 5.25" paper woofer + 0.75" silk dome. 45Hz–35kHz, 87dB, 6Ω, 15–150W, 19lbs. Oiled satin. Intimate, revealing, tight controlled midrange. Studies, bedrooms, small apartments, desktops. Granadillo is the "blood wood" — dense, precise imaging.
+
+BALAM ($7,800 / pair) — Open-Baffle Dipole Flagship, Conacaste wood. 2×8" Alnico full-range + ribbon super-tweeter. 32Hz–45kHz, 94dB, 8Ω, 8–200W, 52lbs. French polish. Three-dimensional soundstage, speakers disappear. Audiophile rooms, vinyl, jazz, classical. Conacaste is the "ear tree" — light, rigid, acoustically transparent.
+
+TZ'IKIN ($1,800 / pair) — Powered Desktop Monitor, Cocobolo wood. 4" aluminum + AMT tweeter. 55Hz–38kHz. Built-in 2×50W Class D (no amp needed). 13lbs. Tung oil. Bright, articulate, harmonic complexity. Desktop, small rooms, vinyl+digital hybrid. Cocobolo is royal tonewood — dense, oily, self-dampening.
+
+When you reach step 5 (recommendation), briefly tie: wood character → room/music → why it sings for them.
+
+Never invent specs or other products. Keep replies to 2–4 sentences. One question at a time.`;
+
+async function callClaude(userText) {
+  messages.push({ role: 'user', content: userText });
+  showTyping();
+  statusEl.textContent = 'Thinking';
+  try {
+    const reply = await window.claude.complete({
+      system: SYSTEM_PROMPT,
+      messages: messages
+    });
+    messages.push({ role: 'assistant', content: reply });
+    hideTyping();
+    statusEl.textContent = 'Ready';
+    addMsg('assistant', reply);
+    inferStep(reply);
+  } catch (err) {
+    hideTyping();
+    statusEl.textContent = 'Error';
+    addMsg('assistant', "Sorry — the line dropped for a moment. Could you say that again?");
+    console.error(err);
+  }
+}
+
+function inferStep(text) {
+  const t = text.toLowerCase();
+  if (/\b(name|email|shipping|invoice|address|country|city)\b/.test(t) || /\bfull name\b/.test(t)) setStep('order');
+  else if (/(recommend|suggest|pair you with|would be the|fits your|for your room|i'd put you|i would put you|points to|balam|k'uhul|ixchel|tz'ikin)/i.test(t) && currentStep !== 'order') setStep('rec');
+  else if (/\b(amp|amplifier|dac|turntable|streamer|phono|source component|budget|existing)\b/.test(t)) setStep('system');
+  else if (/\b(genre|listen to|music|artist|vinyl|streaming|records)\b/.test(t)) setStep('music');
+  else if (/\b(nearfield|critical|background|couch|sofa|desk|late night|loud|volume)\b/.test(t)) setStep('listen');
+}
+
+async function sendMessage() {
+  const text = chatInput.value.trim();
+  if (!text) return;
+  addMsg('user', text);
+  chatInput.value = '';
+  setQuick([]);
+  chatSend.disabled = true;
+  await callClaude(text);
+  chatSend.disabled = false;
+  chatInput.focus();
+}
+
+chatSend.addEventListener('click', sendMessage);
+chatInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') sendMessage(); });
+
+document.getElementById('begin').addEventListener('click', async () => {
+  document.getElementById('intro-card').remove();
+  document.getElementById('chat-input-row').style.display = 'flex';
+  setStep('room');
+
+  // First assistant message — pre-written for snappy UX
+  const greeting = "Welcome. I'm the AURALIS consultant — I'll help you find the speaker that fits your room and the way you actually listen.\n\nLet's start with the room. How large is the space — a cozy study, a mid-size living room, or something larger? And is it open-plan, or a defined room?";
+  messages.push({ role: 'assistant', content: greeting });
+  addMsg('assistant', greeting);
+  setQuick(['Small study', 'Mid-size living room', 'Large / open-plan', 'Dedicated listening room']);
+  chatInput.focus();
+});
+</script>
+
+</body>
+</html>

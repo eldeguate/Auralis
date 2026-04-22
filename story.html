@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Our Story — AURALIS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500&family=Libre+Baskerville:ital,wght@0,400;1,400&family=IBM+Plex+Mono:wght@300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+.page-hero {
+  padding: 180px var(--pad) 80px;
+  max-width: var(--max); margin: 0 auto;
+}
+.page-hero .eyebrow { margin-bottom: 24px; }
+.page-hero h1 {
+  font-size: clamp(48px, 7vw, 104px);
+  font-weight: 200;
+  letter-spacing: -0.01em;
+  line-height: 1.02;
+  max-width: 16ch;
+  text-wrap: balance;
+}
+.page-hero .sub {
+  font-family: var(--f-serif);
+  font-style: italic;
+  font-size: clamp(18px, 1.6vw, 22px);
+  color: var(--stone);
+  margin-top: 32px;
+  max-width: 52ch;
+  line-height: 1.6;
+}
+
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: clamp(40px, 6vw, 96px);
+  max-width: var(--max); margin: 0 auto;
+  padding: 0 var(--pad);
+}
+.two-col.reverse { grid-template-columns: 1.4fr 1fr; }
+@media (max-width: 820px) { .two-col, .two-col.reverse { grid-template-columns: 1fr; } }
+.two-col h2 { margin-bottom: 24px; }
+.two-col p + p { margin-top: 1.2em; }
+.two-col .body-lg { font-size: 17px; line-height: 1.8; }
+
+.image-placeholder {
+  aspect-ratio: 4/5;
+  background: linear-gradient(135deg, #3a4450 0%, #2F3640 50%, #1c2026 100%);
+  position: relative;
+  border-radius: 2px;
+  overflow: hidden;
+}
+.image-placeholder::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent 0 30px,
+    rgba(240,235,227,0.03) 30px 31px
+  );
+}
+.image-placeholder .stamp {
+  position: absolute; bottom: 20px; left: 20px;
+  font-family: var(--f-mono); font-size: 10px;
+  letter-spacing: 0.22em; color: rgba(240,235,227,0.5);
+  text-transform: uppercase;
+  padding: 6px 10px;
+  border: 1px solid rgba(240,235,227,0.2);
+}
+.image-placeholder.warm { background: linear-gradient(135deg, #8B5A3C 0%, #5A3820 60%, #2a1a10 100%); }
+.image-placeholder.cream { background: linear-gradient(135deg, #f0e8d8 0%, #d8cab0 100%); }
+.image-placeholder.cream .stamp { color: var(--stone); border-color: rgba(47,54,64,0.2); }
+.image-placeholder.workshop { background: linear-gradient(135deg, #3a4a40 0%, #1f2a26 100%); }
+
+.pullquote {
+  font-family: var(--f-serif);
+  font-weight: 400;
+  font-style: italic;
+  font-size: clamp(28px, 3.4vw, 44px);
+  line-height: 1.35;
+  color: var(--slate);
+  max-width: 26ch;
+  text-wrap: balance;
+}
+
+.timeline {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+  background: rgba(47,54,64,0.12);
+  margin-top: 48px;
+}
+.timeline-item { background: var(--parchment); padding: 28px 24px; }
+.timeline-item .wk {
+  font-family: var(--f-mono); font-size: 11px;
+  letter-spacing: 0.22em; color: var(--teal-deep);
+  text-transform: uppercase; margin-bottom: 12px;
+}
+.timeline-item h5 { font-family: var(--f-display); font-weight: 300; font-size: 17px; margin-bottom: 8px; }
+.timeline-item p { font-size: 13px; line-height: 1.55; }
+@media (max-width: 820px) {
+  .timeline { grid-template-columns: 1fr 1fr; }
+}
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  max-width: var(--max); margin: 60px auto 0; padding: 0 var(--pad);
+}
+@media (max-width: 820px) { .team-grid { grid-template-columns: 1fr; } }
+.team-member {
+  padding: 32px;
+  background: var(--parchment);
+  border: 1px solid rgba(47,54,64,0.06);
+}
+.team-member .portrait {
+  aspect-ratio: 4/5;
+  background: linear-gradient(135deg, #d8cab0 0%, #b89e7a 100%);
+  margin-bottom: 20px;
+  position: relative;
+}
+.team-member .portrait::after {
+  content: 'PORTRAIT';
+  position: absolute; bottom: 12px; left: 12px;
+  font-family: var(--f-mono); font-size: 10px;
+  letter-spacing: 0.22em; color: rgba(47,54,64,0.4);
+}
+.team-member h4 { font-size: 20px; font-weight: 300; }
+.team-member .role { font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.2em; color: var(--teal-deep); text-transform: uppercase; margin-top: 4px; }
+.team-member p { font-size: 14px; margin-top: 14px; }
+
+.mayan-feature {
+  background: var(--obsidian);
+  color: var(--cream);
+  position: relative;
+  overflow: hidden;
+}
+.mayan-feature::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 60'><path d='M0 30 L20 30 L20 15 L40 15 L40 45 L60 45 L60 30 L80 30 L80 15 L100 15 L100 45 L120 45' fill='none' stroke='%236B9B96' stroke-width='1'/></svg>");
+  background-size: 300px 150px;
+  opacity: 0.08;
+}
+.mayan-feature > * { position: relative; }
+.mayan-feature h2 { color: var(--cream); }
+.mayan-feature p { color: rgba(240,235,227,0.72); }
+.mayan-facts {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px;
+  max-width: var(--max); margin: 60px auto 0; padding: 0 var(--pad);
+}
+@media (max-width: 820px) { .mayan-facts { grid-template-columns: 1fr; } }
+.mayan-fact .big {
+  font-family: var(--f-display); font-weight: 200;
+  font-size: clamp(40px, 5vw, 64px); color: var(--teal);
+  line-height: 1; margin-bottom: 14px;
+}
+.mayan-fact h4 { font-family: var(--f-display); font-weight: 300; font-size: 18px; color: var(--cream); margin-bottom: 8px; }
+.mayan-fact p { font-size: 14px; line-height: 1.6; }
+
+.section-serif-header {
+  max-width: 880px; margin: 0 auto; padding: 0 var(--pad); text-align: left;
+}
+.section-serif-header .section-num { display: block; margin-bottom: 24px; }
+</style>
+</head>
+<body>
+
+<section class="page-hero">
+  <div class="eyebrow reveal">§ Our Story</div>
+  <h1 class="reveal">Where Mayan tradition meets modern sound.</h1>
+  <p class="sub reveal">
+    AURALIS began not with a business plan, but with a question: if the wood of the marimba
+    can sing for a thousand years, what else might it be asked to do?
+  </p>
+</section>
+
+<section class="section alt">
+  <div class="two-col">
+    <div class="reveal">
+      <div class="image-placeholder warm">
+        <div class="stamp">Workshop · Antigua · 1987</div>
+      </div>
+    </div>
+    <div class="reveal">
+      <div class="section-num">01 — The Origin</div>
+      <h2 class="h1" style="max-width: 18ch;">A family of marimba makers, listening differently.</h2>
+      <p class="body-lg" style="margin-top: 32px;">
+        The Xoc family has shaped marimbas in Antigua Guatemala for four generations. The tools
+        are old. The hands are older. Wood comes in as raw slabs from the highlands — Hormigo,
+        mostly — and leaves as instruments tuned by ear against the weight of a chisel.
+      </p>
+      <p class="body-lg">
+        In 2014, Mateo Xoc — the youngest son, trained as both luthier and electrical engineer —
+        noticed something. The very qualities that made Hormigo sing for marimba keys were the
+        qualities loudspeaker designers spend fortunes trying to synthesize in MDF: controlled
+        resonance, internal damping, tonal warmth. So he stopped trying.
+      </p>
+      <p class="body-lg">
+        He took a pair of Hormigo offcuts, shaped them with joinery instead of screws, and fitted
+        them with drivers he had designed as a thesis project. The sound was not neutral. It was
+        not analytical. It was alive. That pair became the first K'uhul.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="section mayan-feature">
+  <div class="section-serif-header reveal">
+    <div class="section-num" style="color: var(--teal);">02 — The Mayan Connection</div>
+    <h2 class="h1" style="max-width: 18ch; color: var(--cream);">Acoustics as sacred architecture.</h2>
+    <p class="body-lg" style="color: rgba(240,235,227,0.72); max-width: 60ch; margin-top: 24px;">
+      The ancient Maya understood acoustics in ways modern science is only now rediscovering. For
+      them, sound was not entertainment — it was how the physical and spiritual worlds spoke to
+      each other. Every major ceremonial site was engineered to shape it.
+    </p>
+  </div>
+  <div class="mayan-facts">
+    <div class="mayan-fact reveal">
+      <div class="big">1,144</div>
+      <h4>The Quetzal Echo</h4>
+      <p>
+        A clap at the base of Kukulkan's pyramid at Chichén Itzá returns as the chirp of a
+        quetzal — 1,144 years after it was engineered. Modern acousticians have replicated the
+        result. They cannot yet explain how it was designed.
+      </p>
+    </div>
+    <div class="mayan-fact reveal">
+      <div class="big">600m</div>
+      <h4>The Voice Projects</h4>
+      <p>
+        Ceremonial plazas at Palenque and Tikal were laid out so that a single human voice
+        speaking from a ruler's platform could be understood clearly at the far edge of the
+        gathered crowd. No amplification. Only geometry.
+      </p>
+    </div>
+    <div class="mayan-fact reveal">
+      <div class="big">4</div>
+      <h4>The Tonewoods</h4>
+      <p>
+        Four sacred hardwoods appear again and again in Mayan musical tradition: Hormigo,
+        Granadillo, Conacaste, Cocobolo. Each chosen not for appearance, but for voice. Each
+        now a foundation of the AURALIS catalogue.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="two-col reverse">
+    <div class="reveal">
+      <div class="section-num">03 — The Workshop</div>
+      <h2 class="h1" style="max-width: 18ch;">Six weeks. A thousand years.</h2>
+      <p class="body-lg" style="margin-top: 32px;">
+        The AURALIS workshop sits on a quiet street four blocks from Antigua's central plaza.
+        Inside: air-drying racks of slabbed tonewood, a single CNC router used only for driver
+        cutouts, and a long bench where every cabinet is fitted by hand.
+      </p>
+      <p class="body-lg">
+        A pair of speakers takes six to eight weeks. Not because we are slow — because the wood
+        is. Hormigo spends twenty-four months on the racks before a single cut is made. The cells
+        relax. The resins settle. What comes off the bench is no longer lumber. It is an
+        instrument waiting to be voiced.
+      </p>
+    </div>
+    <div class="reveal">
+      <div class="image-placeholder workshop">
+        <div class="stamp">Bench · Joinery · Hand-Finished</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="max-width: var(--max); margin: 0 auto; padding: 0 var(--pad);">
+    <div class="timeline reveal">
+      <div class="timeline-item">
+        <div class="wk">Week 1</div>
+        <h5>Slab Selection</h5>
+        <p>Each cabinet begins with a hand-picked slab, matched to its pair for grain and density.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="wk">Weeks 2–3</div>
+        <h5>Joinery &amp; Assembly</h5>
+        <p>Mortise-and-tenon, finger joints, no fasteners. The cabinet is the first instrument.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="wk">Weeks 4–5</div>
+        <h5>Drivers &amp; Crossover</h5>
+        <p>European drivers installed; crossover hand-wound and tuned against a reference pair.</p>
+      </div>
+      <div class="timeline-item">
+        <div class="wk">Weeks 6–8</div>
+        <h5>Listening &amp; Sign-Off</h5>
+        <p>Fifty hours of burn-in. Three listening sessions. Mateo signs the inside panel in pencil.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section alt">
+  <div style="max-width: 900px; margin: 0 auto; padding: 0 var(--pad);" class="reveal">
+    <div class="section-num">04 — Sustainability</div>
+    <h2 class="h1" style="max-width: 20ch;">The forest is not an input.</h2>
+    <p class="body-lg" style="margin-top: 32px;">
+      AURALIS sources its wood through a cooperative of Guatemalan forestry families who have
+      managed highland and Petén woodlands for generations. We buy only from slabs that were
+      already felled — by storm, by age, or by selective thinning that keeps the canopy intact.
+      We never commission a cut.
+    </p>
+    <p class="body-lg">
+      For every pair we ship, three native hardwood saplings are planted through our partnership
+      with ARCAS, Guatemala's wildlife-and-forest rescue association. The wood we use is a debt.
+      We pay it back with interest.
+    </p>
+  </div>
+
+  <div class="mayan-facts" style="margin-top: 72px;">
+    <div class="mayan-fact reveal">
+      <div class="big" style="color: var(--jade);">100%</div>
+      <h4 style="color: var(--slate);">Fallen or Cooperative</h4>
+      <p style="color: var(--stone);">No commissioned cuts. No clear-cutting. Ever.</p>
+    </div>
+    <div class="mayan-fact reveal">
+      <div class="big" style="color: var(--jade);">3 :&thinsp;1</div>
+      <h4 style="color: var(--slate);">Planted Per Pair</h4>
+      <p style="color: var(--stone);">Three native hardwood saplings planted for every pair that ships.</p>
+    </div>
+    <div class="mayan-fact reveal">
+      <div class="big" style="color: var(--jade);">24</div>
+      <h4 style="color: var(--slate);">Months Air-Dried</h4>
+      <p style="color: var(--stone);">Slow cells. Stable cabinets. A better speaker, two years later.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="section-serif-header reveal" style="max-width: var(--max); padding-left: var(--pad); padding-right: var(--pad);">
+    <div class="section-num">05 — The People</div>
+    <h2 class="h1" style="max-width: 18ch;">Four hands. A lifetime of listening.</h2>
+  </div>
+  <div class="team-grid reveal">
+    <div class="team-member">
+      <div class="portrait"></div>
+      <h4>Mateo Xoc</h4>
+      <div class="role">Founder · Head Luthier</div>
+      <p>Fourth-generation marimba maker. Trained in electrical engineering at Universidad del Valle. Voices every pair before sign-off.</p>
+    </div>
+    <div class="team-member">
+      <div class="portrait"></div>
+      <h4>Ana Saquic</h4>
+      <div class="role">Wood Curation · Forestry</div>
+      <p>K'iche' forester who works directly with highland cooperatives. Selects every slab that enters the workshop.</p>
+    </div>
+    <div class="team-member">
+      <div class="portrait"></div>
+      <h4>Julio Reyes</h4>
+      <div class="role">Drivers &amp; Crossover</div>
+      <p>Designs and hand-winds every crossover. Former BBC Research engineer, now three thousand miles south.</p>
+    </div>
+  </div>
+</section>
+
+<section class="consult-cta" style="background: var(--obsidian); color: var(--cream); padding: clamp(72px, 10vw, 140px) var(--pad); text-align: center; position: relative; overflow: hidden;">
+  <div style="position: relative; max-width: 780px; margin: 0 auto;">
+    <div class="eyebrow" style="color: var(--teal);">Next</div>
+    <h2 class="h1" style="color: var(--cream); margin: 18px 0 28px;">Ready to find your voice?</h2>
+    <p style="color: rgba(240,235,227,0.72); max-width: 52ch; margin: 0 auto 36px; font-size: 17px;">
+      Spend ten minutes with our sound consultant. You'll leave with a speaker recommended for
+      your room, your records, and the way you actually listen.
+    </p>
+    <a href="consultation.html" class="btn btn-primary">Begin Consultation <span class="arrow">→</span></a>
+  </div>
+</section>
+
+<script src="assets/shared.js"></script>
+<script>AURALIS.initPage('story');</script>
+</body>
+</html>

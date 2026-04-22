@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contact — AURALIS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500&family=Libre+Baskerville:ital,wght@0,400;1,400&family=IBM+Plex+Mono:wght@300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+.page-hero { padding: 160px var(--pad) 60px; max-width: var(--max); margin: 0 auto; }
+.page-hero h1 { font-size: clamp(48px, 7vw, 96px); font-weight: 200; letter-spacing: -0.01em; line-height: 1.02; max-width: 14ch; }
+.page-hero .sub { font-family: var(--f-serif); font-style: italic; font-size: clamp(18px, 1.5vw, 22px); color: var(--stone); margin-top: 28px; max-width: 52ch; line-height: 1.6; }
+
+.contact-grid {
+  max-width: var(--max); margin: 0 auto; padding: 0 var(--pad);
+  display: grid; grid-template-columns: 1.3fr 1fr;
+  gap: clamp(40px, 6vw, 80px);
+}
+@media (max-width: 900px) { .contact-grid { grid-template-columns: 1fr; } }
+
+/* Form */
+.contact-form {
+  display: grid; gap: 18px;
+  background: var(--parchment);
+  border: 1px solid rgba(47,54,64,0.08);
+  padding: 40px;
+}
+.field { display: grid; gap: 8px; }
+.field label {
+  font-family: var(--f-mono); font-size: 10px;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--stone);
+}
+.field input, .field select, .field textarea {
+  font-family: var(--f-display); font-size: 15px; font-weight: 300;
+  padding: 14px 16px;
+  border: 1px solid rgba(47,54,64,0.15);
+  background: var(--cream);
+  color: var(--slate);
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+  border-radius: 0;
+}
+.field input:focus, .field select:focus, .field textarea:focus {
+  border-color: var(--teal);
+  background: #fff;
+}
+.field textarea { min-height: 140px; resize: vertical; font-family: inherit; line-height: 1.6; }
+.field.row { grid-template-columns: 1fr 1fr; gap: 18px; }
+@media (max-width: 600px) { .field.row { grid-template-columns: 1fr; } }
+.field.row > .field { display: grid; gap: 8px; }
+.submit-row { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; gap: 16px; flex-wrap: wrap; }
+.submit-row .note { font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.18em; color: var(--ash); text-transform: uppercase; }
+.form-success {
+  display: none;
+  padding: 20px 24px; background: rgba(90,140,111,0.12);
+  border-left: 2px solid var(--jade);
+  font-size: 14px; color: var(--slate);
+}
+.form-success.show { display: block; }
+
+/* Direct info */
+.info-block {
+  padding: 32px;
+  background: var(--parchment);
+  border: 1px solid rgba(47,54,64,0.08);
+  margin-bottom: 20px;
+}
+.info-block h3 { font-family: var(--f-display); font-weight: 300; font-size: 20px; margin-bottom: 18px; }
+.info-row { display: flex; gap: 16px; padding: 10px 0; border-bottom: 1px dashed rgba(47,54,64,0.1); }
+.info-row:last-child { border-bottom: 0; }
+.info-row .ikey { font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.2em; color: var(--teal-deep); text-transform: uppercase; min-width: 90px; padding-top: 4px; }
+.info-row .ival { font-size: 15px; color: var(--slate); }
+.info-row .ival a:hover { color: var(--teal-deep); }
+
+.info-block.dark { background: var(--obsidian); color: var(--cream); border-color: transparent; position: relative; overflow: hidden; }
+.info-block.dark h3 { color: var(--cream); }
+.info-block.dark .info-row { border-bottom-color: rgba(240,235,227,0.12); }
+.info-block.dark .ival { color: rgba(240,235,227,0.82); }
+.info-block.dark .ikey { color: var(--teal); }
+.info-block.dark::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 24'><path d='M0 12 L10 12 L10 6 L20 6 L20 18 L30 18 L30 12 L40 12 L40 6 L50 6 L50 18 L60 18 L60 12 L80 12' fill='none' stroke='%236B9B96' stroke-width='1'/></svg>");
+  background-size: 160px 48px; opacity: 0.06; pointer-events: none;
+}
+.info-block.dark > * { position: relative; }
+
+.workshop-visit {
+  background: var(--cream);
+  border: 1px solid rgba(47,54,64,0.08);
+  padding: 40px;
+  margin: 80px auto 0;
+  max-width: var(--max);
+  margin-left: var(--pad);
+  margin-right: var(--pad);
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: clamp(32px, 5vw, 80px);
+  align-items: center;
+}
+@media (max-width: 820px) { .workshop-visit { grid-template-columns: 1fr; } }
+.workshop-visual {
+  aspect-ratio: 4/3;
+  background: linear-gradient(135deg, #3a4a40 0%, #1f2a26 100%);
+  position: relative;
+}
+.workshop-visual::after {
+  content: 'ANTIGUA · WORKSHOP';
+  position: absolute; bottom: 16px; left: 16px;
+  font-family: var(--f-mono); font-size: 10px;
+  letter-spacing: 0.22em; color: rgba(240,235,227,0.5);
+  padding: 5px 10px; border: 1px solid rgba(240,235,227,0.2);
+}
+
+.shipping-strip {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px;
+  max-width: var(--max); margin: 0 auto; padding: 0 var(--pad);
+}
+@media (max-width: 820px) { .shipping-strip { grid-template-columns: 1fr; } }
+.ship-item .num {
+  font-family: var(--f-display); font-weight: 200;
+  font-size: clamp(48px, 5vw, 72px); color: var(--teal);
+  line-height: 1; margin-bottom: 14px;
+}
+.ship-item h4 { font-family: var(--f-display); font-weight: 300; font-size: 18px; margin-bottom: 10px; }
+.ship-item p { font-size: 14px; line-height: 1.6; }
+</style>
+</head>
+<body>
+
+<section class="page-hero">
+  <div class="eyebrow reveal">§ Contact</div>
+  <h1 class="reveal">Let's talk about your listening room.</h1>
+  <p class="sub reveal">
+    For personal recommendations, our sound consultant is faster. For custom orders, press,
+    partnerships or wholesale — write to us directly. Someone from the workshop answers.
+  </p>
+</section>
+
+<section class="section">
+  <div class="contact-grid">
+    <form class="contact-form reveal" id="contact-form" novalidate>
+      <div class="field row">
+        <div class="field"><label for="f-name">Your Name</label><input id="f-name" name="name" required></div>
+        <div class="field"><label for="f-email">Email</label><input id="f-email" name="email" type="email" required></div>
+      </div>
+      <div class="field">
+        <label for="f-subject">Subject</label>
+        <select id="f-subject" name="subject">
+          <option>General Inquiry</option>
+          <option>Custom Order</option>
+          <option>Press</option>
+          <option>Wholesale &amp; Partnership</option>
+          <option>Workshop Visit</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="f-message">Message</label>
+        <textarea id="f-message" name="message" placeholder="Tell us about your room, your records, or what you're hoping to build." required></textarea>
+      </div>
+      <div class="submit-row">
+        <div class="note">We reply within two business days · Guatemala time</div>
+        <button type="submit" class="btn btn-dark">Send Message <span class="arrow">→</span></button>
+      </div>
+      <div class="form-success" id="form-success">
+        Thank you. Your message is on its way to the workshop. Someone will reply within two business days.
+      </div>
+    </form>
+
+    <div class="reveal">
+      <div class="info-block">
+        <h3>Direct</h3>
+        <div class="info-row"><span class="ikey">Email</span><span class="ival"><a href="mailto:hola@auralis.gt">hola@auralis.gt</a></span></div>
+        <div class="info-row"><span class="ikey">Phone</span><span class="ival">+502 7832 0000</span></div>
+        <div class="info-row"><span class="ikey">WhatsApp</span><span class="ival"><a href="#">+502 5500 2200</a></span></div>
+        <div class="info-row"><span class="ikey">Hours</span><span class="ival">Mon–Fri · 9 to 6 · GT</span></div>
+      </div>
+      <div class="info-block dark" id="visit">
+        <h3>Workshop Visit</h3>
+        <p style="font-size: 14px; line-height: 1.7; margin-bottom: 18px; color: rgba(240,235,227,0.72);">
+          The AURALIS workshop in Antigua welcomes visitors by appointment. You'll meet the team,
+          see cabinets at every stage, and listen to a reference pair in the voicing room.
+        </p>
+        <div class="info-row"><span class="ikey">Address</span><span class="ival">5a Avenida Norte 12<br/>Antigua Guatemala 03001</span></div>
+        <div class="info-row"><span class="ikey">Book</span><span class="ival"><a href="mailto:visita@auralis.gt">visita@auralis.gt</a></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section alt">
+  <div class="shipping-strip">
+    <div class="ship-item reveal">
+      <div class="num">6–8</div>
+      <h4>Weeks to Ship</h4>
+      <p>Each pair is built to order. We don't keep inventory. You'll receive a photo of your exact pair mid-build.</p>
+    </div>
+    <div class="ship-item reveal">
+      <div class="num">100%</div>
+      <h4>Worldwide · Insured</h4>
+      <p>Specialty freight with full insurance. We crate in-house using wood offcuts from the cabinets themselves.</p>
+    </div>
+    <div class="ship-item reveal">
+      <div class="num">30</div>
+      <h4>Day Listen</h4>
+      <p>Thirty days in your room. If the pair doesn't sing for you, we arrange return shipping and a full refund.</p>
+    </div>
+  </div>
+</section>
+
+<section class="consult-cta" style="background: var(--obsidian); color: var(--cream); padding: clamp(72px, 10vw, 120px) var(--pad); text-align: center;">
+  <div style="position: relative; max-width: 720px; margin: 0 auto;">
+    <div class="eyebrow" style="color: var(--teal);">Faster</div>
+    <h2 class="h1" style="color: var(--cream); margin: 16px 0 24px;">Skip the form. Talk to our consultant.</h2>
+    <p style="color: rgba(240,235,227,0.72); max-width: 48ch; margin: 0 auto 32px; font-size: 16px;">
+      A ten-minute conversation usually beats a week of email.
+    </p>
+    <a href="consultation.html" class="btn btn-primary">Find Your Sound <span class="arrow">→</span></a>
+  </div>
+</section>
+
+<script src="assets/shared.js"></script>
+<script>
+AURALIS.initPage('contact');
+
+const form = document.getElementById('contact-form');
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  // Simple client-side validation
+  const name = document.getElementById('f-name').value.trim();
+  const email = document.getElementById('f-email').value.trim();
+  const msg = document.getElementById('f-message').value.trim();
+  if (!name || !email || !msg) {
+    alert('Please fill in name, email and message.');
+    return;
+  }
+  document.getElementById('form-success').classList.add('show');
+  form.querySelectorAll('input, select, textarea').forEach(el => el.value = el.tagName === 'SELECT' ? el.options[0].value : '');
+  document.getElementById('form-success').scrollIntoView({behavior: 'smooth', block: 'center'});
+});
+</script>
+</body>
+</html>

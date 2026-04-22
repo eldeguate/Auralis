@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Wood — AURALIS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500&family=Libre+Baskerville:ital,wght@0,400;1,400&family=IBM+Plex+Mono:wght@300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+<style>
+.page-hero {
+  padding: 180px var(--pad) 80px;
+  max-width: var(--max); margin: 0 auto;
+}
+.page-hero h1 {
+  font-size: clamp(48px, 7vw, 104px);
+  font-weight: 200;
+  letter-spacing: -0.01em;
+  line-height: 1.02;
+  max-width: 14ch;
+  text-wrap: balance;
+}
+.page-hero .sub {
+  font-family: var(--f-serif); font-style: italic;
+  font-size: clamp(18px, 1.6vw, 22px);
+  color: var(--stone); margin-top: 32px;
+  max-width: 52ch; line-height: 1.6;
+}
+
+/* Wood selector */
+.wood-selector {
+  max-width: var(--max); margin: 0 auto; padding: 0 var(--pad);
+}
+.wood-tabs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: rgba(47,54,64,0.1);
+  margin-bottom: 64px;
+}
+.wood-tab {
+  background: var(--parchment);
+  padding: 28px 24px;
+  text-align: left;
+  transition: all 0.3s;
+  position: relative;
+  cursor: pointer;
+}
+.wood-tab:hover { background: var(--sand); }
+.wood-tab.active { background: var(--slate); color: var(--cream); }
+.wood-tab.active .wtab-num { color: var(--teal); }
+.wood-tab.active .wtab-desc { color: rgba(240,235,227,0.7); }
+.wtab-num {
+  font-family: var(--f-mono);
+  font-size: 10px; letter-spacing: 0.22em;
+  color: var(--ash);
+  text-transform: uppercase; margin-bottom: 10px;
+}
+.wtab-name {
+  font-family: var(--f-display); font-weight: 300;
+  font-size: 22px; margin-bottom: 4px;
+}
+.wtab-desc { font-family: var(--f-mono); font-size: 11px; letter-spacing: 0.1em; color: var(--stone); }
+.wtab-chip {
+  width: 36px; height: 6px; border-radius: 1px; margin-top: 14px;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.2);
+}
+@media (max-width: 820px) { .wood-tabs { grid-template-columns: 1fr 1fr; } }
+
+.wood-detail {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: clamp(40px, 6vw, 80px);
+  min-height: 520px;
+  align-items: center;
+}
+@media (max-width: 820px) { .wood-detail { grid-template-columns: 1fr; } }
+.wood-sample {
+  aspect-ratio: 3/4;
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+  background: var(--slate);
+  box-shadow: 0 40px 80px -40px rgba(47,54,64,0.4);
+}
+.wood-sample .grain {
+  position: absolute; inset: 0;
+  background-image:
+    repeating-linear-gradient(
+      94deg,
+      rgba(0,0,0,0.08) 0 1px,
+      transparent 1px 7px,
+      rgba(0,0,0,0.05) 7px 8px,
+      transparent 8px 17px,
+      rgba(255,220,180,0.08) 17px 19px,
+      transparent 19px 28px,
+      rgba(0,0,0,0.12) 28px 29px,
+      transparent 29px 40px
+    ),
+    linear-gradient(180deg, rgba(255,220,180,0.08) 0%, transparent 50%, rgba(0,0,0,0.2) 100%);
+  mix-blend-mode: multiply;
+}
+.wood-sample .highlight {
+  position: absolute;
+  top: 20%; left: -10%; width: 70%; height: 20%;
+  background: linear-gradient(90deg, transparent, rgba(255,230,190,0.15), transparent);
+  transform: rotate(-8deg);
+}
+.wood-sample .label {
+  position: absolute;
+  top: 20px; left: 20px;
+  font-family: var(--f-mono); font-size: 10px;
+  letter-spacing: 0.2em;
+  padding: 6px 10px;
+  background: rgba(240,235,227,0.92);
+  color: var(--slate);
+  border: 1px solid rgba(47,54,64,0.15);
+  text-transform: uppercase;
+}
+
+.wood-info h2 {
+  font-size: clamp(40px, 5vw, 64px);
+  font-weight: 200;
+  letter-spacing: -0.005em;
+  margin-bottom: 4px;
+}
+.wood-info .translation {
+  font-family: var(--f-serif);
+  font-style: italic;
+  font-size: 18px;
+  color: var(--stone);
+  margin-bottom: 28px;
+}
+.wood-info .meta-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 24px 40px; margin: 28px 0;
+  padding: 28px 0;
+  border-top: 1px solid rgba(47,54,64,0.1);
+  border-bottom: 1px solid rgba(47,54,64,0.1);
+}
+.wood-info .meta-row .mlabel {
+  font-family: var(--f-mono); font-size: 10px;
+  letter-spacing: 0.22em; color: var(--ash);
+  text-transform: uppercase; margin-bottom: 6px;
+}
+.wood-info .meta-row .mval {
+  font-family: var(--f-display); font-weight: 300;
+  font-size: 16px; color: var(--slate);
+}
+.wood-info .story-p { font-size: 16px; line-height: 1.75; margin-top: 24px; }
+.wood-info .heritage {
+  margin-top: 24px; padding: 20px 24px;
+  background: var(--parchment);
+  border-left: 2px solid var(--terracotta);
+}
+.wood-info .heritage .hlabel {
+  font-family: var(--f-mono); font-size: 10px;
+  letter-spacing: 0.22em; color: var(--terracotta);
+  text-transform: uppercase; margin-bottom: 8px;
+}
+.wood-info .heritage p { font-family: var(--f-serif); font-style: italic; font-size: 16px; line-height: 1.6; }
+
+/* Process */
+.process-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+@media (max-width: 820px) { .process-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 500px) { .process-grid { grid-template-columns: 1fr; } }
+.process-step {
+  padding: 32px 24px;
+  background: var(--parchment);
+  border: 1px solid rgba(47,54,64,0.06);
+  position: relative;
+  min-height: 200px;
+}
+.process-step .pnum {
+  font-family: var(--f-mono); font-weight: 300;
+  font-size: 40px; color: var(--teal);
+  line-height: 1; margin-bottom: 20px;
+}
+.process-step h5 { font-family: var(--f-display); font-weight: 300; font-size: 18px; margin-bottom: 10px; }
+.process-step p { font-size: 13px; line-height: 1.6; }
+.process-step .dur {
+  position: absolute; top: 24px; right: 24px;
+  font-family: var(--f-mono); font-size: 10px;
+  letter-spacing: 0.18em; color: var(--stone);
+  text-transform: uppercase;
+  padding: 4px 8px;
+  border: 1px solid rgba(47,54,64,0.15);
+}
+
+/* Joinery detail */
+.joinery-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(40px, 6vw, 80px);
+  align-items: center;
+}
+@media (max-width: 820px) { .joinery-grid { grid-template-columns: 1fr; } }
+.joinery-visual {
+  aspect-ratio: 1;
+  background: var(--slate);
+  position: relative;
+  overflow: hidden;
+}
+.joinery-visual svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+</style>
+</head>
+<body>
+
+<section class="page-hero">
+  <div class="eyebrow reveal">§ The Wood</div>
+  <h1 class="reveal">The wood speaks.</h1>
+  <p class="sub reveal">
+    The cabinet is not a container for sound. It is part of the instrument. Four Central American
+    hardwoods — each chosen for voice, not appearance — form the foundation of every AURALIS speaker.
+  </p>
+</section>
+
+<section class="section alt">
+  <div class="wood-selector">
+    <div class="section-num reveal" style="margin-bottom: 32px;">01 — Tonewood Library</div>
+    <div class="wood-tabs reveal" id="wood-tabs"></div>
+    <div class="wood-detail reveal" id="wood-detail"></div>
+  </div>
+</section>
+
+<section class="section">
+  <div style="max-width: var(--max); margin: 0 auto; padding: 0 var(--pad);">
+    <div class="reveal" style="margin-bottom: 60px;">
+      <div class="section-num">02 — The Process</div>
+      <h2 class="h1" style="max-width: 16ch;">Eight weeks. Eight steps. One pair.</h2>
+    </div>
+    <div class="process-grid reveal">
+      <div class="process-step">
+        <div class="pnum">01</div>
+        <div class="dur">Day 1</div>
+        <h5>Slab Selection</h5>
+        <p>Each cabinet starts as a hand-picked slab, chosen for grain figure and paired by density.</p>
+      </div>
+      <div class="process-step">
+        <div class="pnum">02</div>
+        <div class="dur">24 mo.</div>
+        <h5>Air Drying</h5>
+        <p>Twenty-four months in highland air. No kiln. The wood relaxes on its own schedule.</p>
+      </div>
+      <div class="process-step">
+        <div class="pnum">03</div>
+        <div class="dur">Wk 1</div>
+        <h5>Milling</h5>
+        <p>Rough panels are milled and squared. Joint geometry is laid out in pencil by hand.</p>
+      </div>
+      <div class="process-step">
+        <div class="pnum">04</div>
+        <div class="dur">Wk 2</div>
+        <h5>Joinery</h5>
+        <p>Mortise-and-tenon. Finger joints. Hide glue. No screws. No staples. No particle board.</p>
+      </div>
+      <div class="process-step">
+        <div class="pnum">05</div>
+        <div class="dur">Wk 3</div>
+        <h5>Driver Installation</h5>
+        <p>European drivers are set into hand-cut mounting rings. Gasket and torque by feel.</p>
+      </div>
+      <div class="process-step">
+        <div class="pnum">06</div>
+        <div class="dur">Wk 4</div>
+        <h5>Crossover Tuning</h5>
+        <p>Each crossover is hand-wound, then tuned against a reference pair until the balance holds.</p>
+      </div>
+      <div class="process-step">
+        <div class="pnum">07</div>
+        <div class="dur">Wk 5</div>
+        <h5>Finish &amp; Polish</h5>
+        <p>Oil, resin, or French polish — applied in thin coats with time between each to cure.</p>
+      </div>
+      <div class="process-step">
+        <div class="pnum">08</div>
+        <div class="dur">Wk 6–8</div>
+        <h5>Listening &amp; Sign-Off</h5>
+        <p>Fifty hours of burn-in. Three sessions. Mateo signs the inside panel in pencil.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section alt">
+  <div style="max-width: var(--max); margin: 0 auto; padding: 0 var(--pad);">
+    <div class="joinery-grid">
+      <div class="reveal">
+        <div class="section-num">03 — Technical Philosophy</div>
+        <h2 class="h1" style="max-width: 16ch;">Why wood outperforms MDF.</h2>
+        <p class="body-lg" style="margin-top: 28px;">
+          MDF is consistent, cheap, and dead. That last property is what speaker designers actually
+          prize — a cabinet that does not move. But "dead" and "natural" are not the same thing.
+        </p>
+        <p class="body-lg">
+          Solid tonewood damps itself through cellular structure and resin. It moves just enough,
+          at frequencies well outside the audible band, to warm the sound without coloring it. The
+          result isn't neutrality. It's presence.
+        </p>
+        <p class="body-lg">
+          That presence is the reason a marimba does not sound like a xylophone. Same bars. Same
+          mallets. Different wood. Our cabinets work the same way.
+        </p>
+      </div>
+      <div class="reveal">
+        <div class="joinery-visual">
+          <svg viewBox="0 0 400 400" fill="none">
+            <!-- Mayan-inspired finger joint diagram -->
+            <rect x="0" y="0" width="400" height="400" fill="#2F3640"/>
+            <g stroke="#6B9B96" stroke-width="1" fill="none" opacity="0.9">
+              <!-- step-fret top -->
+              <path d="M40 100 L80 100 L80 60 L160 60 L160 140 L240 140 L240 60 L320 60 L320 100 L360 100"/>
+              <!-- finger joint illustration -->
+              <g transform="translate(80, 180)">
+                <rect x="0" y="0" width="240" height="40" stroke="#E8E2D8"/>
+                <rect x="0" y="40" width="240" height="40" stroke="#E8E2D8"/>
+                <path d="M0 40 L30 40 L30 0 L60 0 L60 40 L90 40 L90 0 L120 0 L120 40 L150 40 L150 0 L180 0 L180 40 L210 40 L210 0 L240 0" stroke="#E8E2D8" stroke-width="1.5"/>
+                <path d="M0 40 L30 40 L30 80 L60 80 L60 40 L90 40 L90 80 L120 80 L120 40 L150 40 L150 80 L180 80 L180 40 L210 40 L210 80 L240 80" stroke="#E8E2D8" stroke-width="1.5"/>
+              </g>
+              <text x="200" y="300" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" letter-spacing="0.2em" fill="#E8E2D8">FINGER JOINT · NO FASTENERS</text>
+              <!-- step-fret bottom -->
+              <path d="M40 350 L80 350 L80 310 L160 310 L160 380 L240 380 L240 310 L320 310 L320 350 L360 350"/>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div style="max-width: var(--max); margin: 0 auto; padding: 0 var(--pad);">
+    <div class="joinery-grid">
+      <div class="reveal">
+        <div class="joinery-visual" style="background: #8B5A3C;">
+          <div style="position: absolute; inset: 0;" class="wood hormigo"></div>
+          <svg viewBox="0 0 400 400" fill="none" style="position:absolute;inset:0;">
+            <g stroke="rgba(255,230,190,0.4)" stroke-width="0.5" fill="none">
+              <!-- mortise and tenon overlay -->
+              <rect x="100" y="80" width="200" height="80" stroke="rgba(255,230,190,0.8)" stroke-width="1"/>
+              <rect x="140" y="160" width="120" height="120" stroke="rgba(255,230,190,0.8)" stroke-width="1"/>
+              <rect x="100" y="280" width="200" height="80" stroke="rgba(255,230,190,0.8)" stroke-width="1"/>
+            </g>
+            <text x="200" y="220" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" letter-spacing="0.2em" fill="rgba(255,240,210,0.7)">MORTISE · TENON</text>
+          </svg>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="section-num">04 — Joinery</div>
+        <h2 class="h1" style="max-width: 16ch;">As beautiful inside as out.</h2>
+        <p class="body-lg" style="margin-top: 28px;">
+          We use traditional Mayan and European woodworking techniques inherited from our
+          luthier lineage: mortise-and-tenon for primary joints, finger joints for panels,
+          hide glue for acoustic transparency.
+        </p>
+        <p class="body-lg">
+          Open any AURALIS cabinet and you will find the same care on the inside as the
+          outside. No particle board. No staples. No sloppy bracing. A speaker you would be
+          proud to see disassembled.
+        </p>
+        <div style="margin-top: 36px;">
+          <a href="collection.html" class="btn btn-secondary">See the Collection <span class="arrow">→</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="assets/shared.js"></script>
+<script src="assets/data.js"></script>
+<script>
+AURALIS.initPage('wood');
+
+const tabs = document.getElementById('wood-tabs');
+const detail = document.getElementById('wood-detail');
+
+function renderTabs(activeId) {
+  tabs.innerHTML = AURALIS_WOODS.map((w, i) => `
+    <button class="wood-tab ${w.id===activeId?'active':''}" data-id="${w.id}">
+      <div class="wtab-num">Tonewood 0${i+1}</div>
+      <div class="wtab-name">${w.name}</div>
+      <div class="wtab-desc">${w.origin}</div>
+      <div class="wtab-chip wood ${w.id}"></div>
+    </button>
+  `).join('');
+  tabs.querySelectorAll('.wood-tab').forEach(btn => {
+    btn.addEventListener('click', () => select(btn.dataset.id));
+  });
+}
+function renderDetail(w) {
+  detail.innerHTML = `
+    <div class="wood-sample" style="background:${w.color};">
+      <div class="grain"></div>
+      <div class="highlight"></div>
+      <div class="label">${w.name.toUpperCase()} · SAMPLE</div>
+    </div>
+    <div class="wood-info">
+      <h2>${w.name}</h2>
+      <div class="translation">${w.origin}</div>
+      <div class="meta-grid">
+        <div class="meta-row"><div class="mlabel">Acoustic Character</div><div class="mval">${w.character}</div></div>
+        <div class="meta-row"><div class="mlabel">Origin</div><div class="mval">${w.origin}</div></div>
+      </div>
+      <p class="story-p">${w.story}</p>
+      <div class="heritage">
+        <div class="hlabel">Mayan Heritage</div>
+        <p>${w.heritage}</p>
+      </div>
+    </div>
+  `;
+}
+function select(id) {
+  const w = AURALIS_WOODS.find(x => x.id === id);
+  renderTabs(id); renderDetail(w);
+}
+select('hormigo');
+</script>
+
+</body>
+</html>

@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AURALIS — Bespoke Hi-Fi Speakers</title>
+<meta name="ext-resource-dependency" content="assets/img/speaker-kuhul.png" data-resource-id="spKuhul" />
+<meta name="ext-resource-dependency" content="assets/img/speaker-ixchel.png" data-resource-id="spIxchel" />
+<meta name="ext-resource-dependency" content="assets/img/speaker-balam.png" data-resource-id="spBalam" />
+<meta name="ext-resource-dependency" content="assets/img/speaker-tzikin.png" data-resource-id="spTzikin" />
+<template id="__bundler_thumbnail" data-bg-color="#F0EBE3">
+  <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+    <rect x="120" y="120" width="160" height="160" rx="28" fill="none" stroke="#6B9B96" stroke-width="6"/>
+    <path d="M150 180 Q180 160 210 180 T270 180" fill="none" stroke="#6B9B96" stroke-width="6" stroke-linecap="round"/>
+    <path d="M150 210 Q180 190 210 210 T270 210" fill="none" stroke="#6B9B96" stroke-width="6" stroke-linecap="round"/>
+    <path d="M150 240 Q180 220 210 240 T270 240" fill="none" stroke="#6B9B96" stroke-width="6" stroke-linecap="round"/>
+  </svg>
+</template>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500&family=Libre+Baskerville:ital,wght@0,400;1,400&family=IBM+Plex+Mono:wght@300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+<link rel="stylesheet" href="assets/speaker-visual.css">
+<style>
+/* Homepage-specific */
+.hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr;
+  align-items: center;
+  padding: 120px var(--pad) 80px;
+  position: relative;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(circle at 85% 20%, rgba(107,155,150,0.08) 0%, transparent 55%),
+    radial-gradient(circle at 10% 90%, rgba(193,124,90,0.06) 0%, transparent 50%),
+    var(--cream);
+  pointer-events: none;
+}
+.hero-corner {
+  position: absolute;
+  width: 200px; height: 200px;
+  opacity: 0.12;
+  pointer-events: none;
+}
+.hero-corner.tl { top: 80px; left: var(--pad); }
+.hero-corner.br { bottom: 40px; right: var(--pad); transform: rotate(180deg); }
+.hero-inner { position: relative; max-width: var(--max); margin: 0 auto; width: 100%; }
+.hero .mark-big { width: 80px; height: 80px; color: var(--teal); margin-bottom: 36px; }
+.hero .display {
+  font-size: clamp(56px, 9vw, 140px);
+  font-weight: 200;
+  letter-spacing: 0.02em;
+  line-height: 0.95;
+  margin-bottom: 16px;
+}
+.hero .tagline {
+  font-family: var(--f-mono);
+  font-size: 13px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--teal-deep);
+  margin-bottom: 48px;
+}
+.hero-poem {
+  font-family: var(--f-serif);
+  font-size: clamp(18px, 1.5vw, 22px);
+  color: var(--stone);
+  line-height: 1.7;
+  margin-bottom: 56px;
+  max-width: 40ch;
+}
+.hero-poem span { display: block; }
+.hero-ctas { display: flex; gap: 16px; flex-wrap: wrap; }
+.scroll-hint {
+  position: absolute;
+  bottom: 36px; left: 50%; transform: translateX(-50%);
+  font-family: var(--f-mono); font-size: 10px;
+  letter-spacing: 0.3em; color: var(--ash);
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+}
+.scroll-hint::after {
+  content: ''; width: 1px; height: 40px;
+  background: linear-gradient(180deg, var(--ash), transparent);
+  animation: scrollLine 2s ease-in-out infinite;
+}
+@keyframes scrollLine {
+  0%, 100% { opacity: 0.3; transform: scaleY(0.6); }
+  50% { opacity: 1; transform: scaleY(1); }
+}
+
+/* Essence strip */
+.essence {
+  padding: 60px var(--pad);
+  background: var(--parchment);
+  border-top: 1px solid rgba(47,54,64,0.06);
+  border-bottom: 1px solid rgba(47,54,64,0.06);
+}
+.essence-grid {
+  max-width: var(--max); margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 40px;
+}
+.essence-item { display: flex; flex-direction: column; gap: 10px; }
+.essence-item .num {
+  font-family: var(--f-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  color: var(--teal-deep);
+}
+.essence-item h4 {
+  font-family: var(--f-display);
+  font-weight: 300;
+  font-size: 18px;
+  color: var(--slate);
+}
+.essence-item p { font-size: 13px; color: var(--stone); line-height: 1.5; }
+@media (max-width: 820px) {
+  .essence-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+}
+
+/* Featured speaker */
+.featured {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: clamp(40px, 6vw, 96px);
+  align-items: center;
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 var(--pad);
+}
+.featured .visual-frame {
+  aspect-ratio: 4/5;
+  border: 1px solid rgba(47,54,64,0.08);
+  position: relative;
+  overflow: hidden;
+}
+.featured .caption {
+  position: absolute;
+  bottom: 24px; right: 24px;
+  background: rgba(240,235,227,0.9);
+  padding: 10px 14px;
+  font-family: var(--f-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--slate);
+  border: 1px solid rgba(47,54,64,0.1);
+}
+.featured h2 .name-big {
+  font-size: clamp(44px, 5.2vw, 72px);
+  font-weight: 200;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+.featured .translation {
+  font-family: var(--f-serif);
+  font-style: italic;
+  color: var(--stone);
+  margin-top: 8px;
+  font-size: 18px;
+}
+.featured .description { margin-top: 28px; font-size: 17px; line-height: 1.75; }
+.featured .spec-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px 40px;
+  margin-top: 36px;
+  padding-top: 32px;
+  border-top: 1px solid rgba(47,54,64,0.1);
+}
+.spec-row .label {
+  font-family: var(--f-mono); font-size: 10px;
+  letter-spacing: 0.2em; color: var(--ash);
+  text-transform: uppercase; display: block; margin-bottom: 4px;
+}
+.spec-row .value { font-size: 15px; color: var(--slate); }
+.featured .cta-row { margin-top: 40px; display: flex; gap: 12px; flex-wrap: wrap; }
+@media (max-width: 820px) { .featured { grid-template-columns: 1fr; } }
+
+/* Promise */
+.promise {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 0 var(--pad);
+  text-align: center;
+}
+.promise .big-serif {
+  font-family: var(--f-serif);
+  font-weight: 400;
+  font-style: italic;
+  font-size: clamp(24px, 2.4vw, 34px);
+  line-height: 1.5;
+  color: var(--slate);
+  margin: 36px 0;
+  text-wrap: balance;
+}
+.promise .attribution {
+  font-family: var(--f-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ash);
+}
+.promise .attribution span { color: var(--teal-deep); }
+
+/* Consultation CTA — dark, warm */
+.consult-cta {
+  background: var(--obsidian);
+  color: var(--cream);
+  padding: clamp(72px, 10vw, 140px) var(--pad);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.consult-cta::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 80 24'><path d='M0 12 L10 12 L10 6 L20 6 L20 18 L30 18 L30 12 L40 12 L40 6 L50 6 L50 18 L60 18 L60 12 L80 12' fill='none' stroke='%236B9B96' stroke-width='1'/></svg>");
+  background-repeat: repeat;
+  background-size: 200px 60px;
+  opacity: 0.06;
+}
+.consult-cta > * { position: relative; }
+.consult-cta .eyebrow { color: var(--teal); }
+.consult-cta h2 {
+  font-size: clamp(36px, 5vw, 62px);
+  font-weight: 200;
+  letter-spacing: -0.005em;
+  line-height: 1.1;
+  margin: 18px auto 28px;
+  max-width: 18ch;
+  text-wrap: balance;
+}
+.consult-cta p {
+  max-width: 52ch; margin: 0 auto 40px;
+  color: rgba(240,235,227,0.72);
+  font-size: 17px;
+  line-height: 1.7;
+}
+.consult-cta .btn-primary { background: var(--teal); color: var(--cream); }
+.consult-cta .btn-primary:hover { background: var(--teal-deep); }
+
+/* Collection preview strip */
+.collection-strip {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 var(--pad);
+}
+.collection-head {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  gap: 24px; flex-wrap: wrap;
+  margin-bottom: 48px;
+}
+.collection-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+@media (max-width: 1000px) { .collection-preview-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 560px) { .collection-preview-grid { grid-template-columns: 1fr; } }
+.mini-card { background: var(--parchment); border: 1px solid rgba(47,54,64,0.06); padding: 20px; transition: all 0.3s; }
+.mini-card:hover { border-color: rgba(107,155,150,0.4); transform: translateY(-4px); }
+.mini-card .sp-visual { aspect-ratio: 1/1.1; margin-bottom: 18px; }
+.mini-card .mname { font-family: var(--f-display); font-weight: 300; font-size: 22px; }
+.mini-card .mtranslation { font-family: var(--f-serif); font-style: italic; font-size: 12px; color: var(--stone); margin-top: 2px; }
+.mini-card .mfoot { display: flex; justify-content: space-between; margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(47,54,64,0.08); }
+.mini-card .mtype { font-family: var(--f-mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ash); }
+.mini-card .mprice { font-family: var(--f-mono); font-size: 12px; color: var(--teal-deep); }
+</style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-bg"></div>
+  <svg class="hero-corner tl" viewBox="0 0 200 200" fill="none" aria-hidden="true">
+    <path d="M0 100 L25 100 L25 75 L50 75 L50 125 L75 125 L75 100 L100 100 L100 75 L125 75 L125 125 L150 125 L150 100 L200 100" stroke="#2F3640" stroke-width="1" fill="none"/>
+    <path d="M0 140 L40 140 L40 120 L80 120 L80 160 L120 160 L120 140 L200 140" stroke="#2F3640" stroke-width="1" fill="none" opacity="0.6"/>
+  </svg>
+  <svg class="hero-corner br" viewBox="0 0 200 200" fill="none" aria-hidden="true">
+    <path d="M0 100 L25 100 L25 75 L50 75 L50 125 L75 125 L75 100 L100 100 L100 75 L125 75 L125 125 L150 125 L150 100 L200 100" stroke="#2F3640" stroke-width="1" fill="none"/>
+    <path d="M0 140 L40 140 L40 120 L80 120 L80 160 L120 160 L120 140 L200 140" stroke="#2F3640" stroke-width="1" fill="none" opacity="0.6"/>
+  </svg>
+
+  <div class="hero-inner reveal">
+    <svg class="mark-big" viewBox="0 0 40 40" fill="none">
+      <rect x="1.5" y="1.5" width="37" height="37" rx="7" stroke="currentColor" stroke-width="1.6"/>
+      <path d="M8 15 Q14 11 20 15 T32 15" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+      <path d="M8 21 Q14 17 20 21 T32 21" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+      <path d="M8 27 Q14 23 20 27 T32 27" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+    </svg>
+    <h1 class="display">AURALIS</h1>
+    <div class="tagline">Bespoke Hi-Fi Speakers</div>
+    <p class="hero-poem">
+      <span>Born in the Guatemalan highlands.</span>
+      <span>Shaped by Mayan acoustic tradition.</span>
+      <span>Crafted for the way you listen.</span>
+    </p>
+    <div class="hero-ctas">
+      <a href="consultation.html" class="btn btn-primary">Find Your Sound <span class="arrow">→</span></a>
+      <a href="collection.html" class="btn btn-secondary">Explore Collection</a>
+    </div>
+  </div>
+  <div class="scroll-hint">SCROLL</div>
+</section>
+
+<section class="essence">
+  <div class="essence-grid">
+    <div class="essence-item reveal">
+      <div class="num">01</div>
+      <h4>Handcrafted in Guatemala</h4>
+      <p>Every pair shaped by hand in our Antigua workshop. Six to eight weeks, beginning to end.</p>
+    </div>
+    <div class="essence-item reveal">
+      <div class="num">02</div>
+      <h4>Mayan Acoustic Heritage</h4>
+      <p>A thousand-year lineage of acoustic understanding, carried forward in every cabinet.</p>
+    </div>
+    <div class="essence-item reveal">
+      <div class="num">03</div>
+      <h4>Sustainably Sourced Tonewoods</h4>
+      <p>Hormigo, Granadillo, Conacaste, Cocobolo — fallen or cooperative-harvested. Never clear-cut.</p>
+    </div>
+    <div class="essence-item reveal">
+      <div class="num">04</div>
+      <h4>Built to Order</h4>
+      <p>No inventory. No two pairs alike. Each speaker carries the fingerprint of its forest.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="featured">
+    <div class="visual-frame reveal" id="featured-visual">
+      <div class="caption">BALAM · FLAGSHIP · CONACASTE</div>
+    </div>
+    <div class="reveal">
+      <div class="section-num">01 — Featured</div>
+      <h2>
+        <span class="name-big">Balam</span>
+        <div class="translation">"Jaguar" — Mayan symbol of power</div>
+      </h2>
+      <p class="description">
+        Our open-baffle flagship. The Balam breathes — its dipole design creates a three-dimensional
+        soundstage that dissolves the speakers from the room entirely. Conacaste's broad grain and low
+        density make it acoustically transparent; what you hear is only the music.
+      </p>
+      <div class="spec-list">
+        <div class="spec-row"><span class="label">Drivers</span><span class="value">2× 8" Alnico · 1× Ribbon</span></div>
+        <div class="spec-row"><span class="label">Frequency</span><span class="value">32Hz – 45kHz</span></div>
+        <div class="spec-row"><span class="label">Sensitivity</span><span class="value">94 dB @ 8Ω</span></div>
+        <div class="spec-row"><span class="label">From</span><span class="value">$7,800 / pair</span></div>
+      </div>
+      <div class="cta-row">
+        <a href="collection.html#balam" class="btn btn-secondary">View Full Specs</a>
+        <a href="consultation.html" class="btn btn-primary">Inquire <span class="arrow">→</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section alt">
+  <div class="collection-strip">
+    <div class="collection-head reveal">
+      <div>
+        <div class="section-num">02 — The Collection</div>
+        <h2 class="h1" style="max-width: 16ch;">Four voices, one forest.</h2>
+      </div>
+      <a href="collection.html" class="btn btn-secondary">All Four Speakers <span class="arrow">→</span></a>
+    </div>
+    <div class="collection-preview-grid reveal" id="mini-grid"></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="promise reveal">
+    <div class="section-num">03 — The Promise</div>
+    <p class="big-serif">
+      "A speaker cabinet is not a box. It is an instrument. And an instrument is not finished until
+      it has been asked to sing."
+    </p>
+    <div class="attribution"><span>— Mateo Xoc</span> · Founder &amp; Head Luthier</div>
+    <div style="margin-top: 40px;">
+      <a href="story.html" class="btn btn-secondary">Read Our Story <span class="arrow">→</span></a>
+    </div>
+  </div>
+</section>
+
+<section class="consult-cta">
+  <div class="eyebrow">04 — Consultation</div>
+  <h2>Let us curate your sound.</h2>
+  <p>
+    Our sound consultant will guide you through your space, your listening habits, and your musical
+    taste — to recommend the AURALIS speaker built for your life.
+  </p>
+  <a href="consultation.html" class="btn btn-primary">Begin Consultation <span class="arrow">→</span></a>
+</section>
+
+<script src="assets/shared.js"></script>
+<script src="assets/data.js"></script>
+<script>
+  AURALIS.initPage(null);
+
+  // Featured Balam visual
+  const balam = AURALIS_SPEAKERS.find(s => s.id === 'balam');
+  document.getElementById('featured-visual').insertAdjacentHTML('afterbegin', renderSpeakerVisual(balam));
+
+  // Mini collection strip
+  const grid = document.getElementById('mini-grid');
+  grid.innerHTML = AURALIS_SPEAKERS.map(s => `
+    <a href="collection.html#${s.id}" class="mini-card">
+      ${renderSpeakerVisual(s)}
+      <div class="mname">${s.name}</div>
+      <div class="mtranslation">${s.meaning}</div>
+      <div class="mfoot">
+        <span class="mtype">${s.type.split(' ').slice(0,2).join(' ')}</span>
+        <span class="mprice">$${s.price.toLocaleString()}</span>
+      </div>
+    </a>
+  `).join('');
+</script>
+
+</body>
+</html>

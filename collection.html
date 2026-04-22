@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Collection — AURALIS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;500&family=Libre+Baskerville:ital,wght@0,400;1,400&family=IBM+Plex+Mono:wght@300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/styles.css">
+<link rel="stylesheet" href="assets/speaker-visual.css">
+<style>
+.page-hero { padding: 180px var(--pad) 60px; max-width: var(--max); margin: 0 auto; }
+.page-hero h1 { font-size: clamp(48px, 7vw, 104px); font-weight: 200; letter-spacing: -0.01em; line-height: 1.02; max-width: 14ch; }
+.page-hero .sub { font-family: var(--f-serif); font-style: italic; font-size: clamp(18px, 1.6vw, 22px); color: var(--stone); margin-top: 32px; max-width: 52ch; line-height: 1.6; }
+
+.collection-grid {
+  max-width: var(--max); margin: 0 auto;
+  padding: 0 var(--pad);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+}
+@media (max-width: 820px) { .collection-grid { grid-template-columns: 1fr; } }
+
+.speaker-item {
+  background: var(--parchment);
+  border: 1px solid rgba(47,54,64,0.06);
+  padding: 32px;
+  cursor: pointer;
+  transition: all 0.35s;
+  display: flex; flex-direction: column;
+  scroll-margin-top: 100px;
+}
+.speaker-item:hover { border-color: rgba(107,155,150,0.4); box-shadow: 0 30px 60px -30px rgba(47,54,64,0.18); transform: translateY(-4px); }
+.speaker-item.open { grid-column: 1 / -1; }
+.speaker-item .visual-wrap {
+  aspect-ratio: 4/5;
+  overflow: hidden; position: relative;
+  margin-bottom: 24px;
+}
+.speaker-item.open .visual-wrap { aspect-ratio: 16/10; }
+
+.flagship-tag {
+  position: absolute; top: 16px; right: 16px;
+  font-family: var(--f-mono); font-size: 10px;
+  letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--cream);
+  background: var(--terracotta);
+  padding: 6px 10px;
+  z-index: 2;
+}
+
+.sp-head {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  gap: 16px; flex-wrap: wrap;
+}
+.sp-name {
+  font-family: var(--f-display); font-weight: 200;
+  font-size: 36px; letter-spacing: 0.005em; line-height: 1;
+}
+.sp-mean { font-family: var(--f-serif); font-style: italic; color: var(--stone); font-size: 15px; margin-top: 4px; }
+.sp-price { font-family: var(--f-mono); font-size: 14px; color: var(--teal-deep); }
+
+.sp-meta-row {
+  display: flex; gap: 8px 14px; flex-wrap: wrap;
+  margin-top: 16px; padding-top: 16px;
+  border-top: 1px solid rgba(47,54,64,0.08);
+}
+.sp-meta-chip {
+  font-family: var(--f-mono); font-size: 10px;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--stone);
+  padding: 5px 10px;
+  background: var(--sand);
+}
+
+.sp-expand-btn {
+  margin-top: 20px;
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--f-mono); font-size: 11px;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--teal-deep);
+}
+.sp-expand-btn .arr { transition: transform 0.25s; }
+.speaker-item.open .sp-expand-btn .arr { transform: rotate(45deg); }
+
+.sp-detail {
+  margin-top: 32px;
+  padding-top: 32px;
+  border-top: 1px solid rgba(47,54,64,0.08);
+  display: none;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 48px;
+}
+.speaker-item.open .sp-detail { display: grid; }
+@media (max-width: 820px) { .sp-detail { grid-template-columns: 1fr !important; } }
+
+.sp-description { font-size: 17px; line-height: 1.75; color: var(--stone); }
+.sp-ideal {
+  margin-top: 28px;
+  padding: 20px 24px;
+  background: var(--sand);
+  border-left: 2px solid var(--teal);
+}
+.sp-ideal .ilabel {
+  font-family: var(--f-mono); font-size: 10px;
+  letter-spacing: 0.22em; color: var(--teal-deep);
+  text-transform: uppercase; margin-bottom: 8px;
+}
+.sp-ideal p { font-size: 15px; color: var(--slate); line-height: 1.6; }
+
+.sp-specs-table { width: 100%; border-collapse: collapse; }
+.sp-specs-table tr { border-bottom: 1px solid rgba(47,54,64,0.08); }
+.sp-specs-table tr:last-child { border-bottom: 0; }
+.sp-specs-table td { padding: 14px 0; vertical-align: top; }
+.sp-specs-table td.lab {
+  font-family: var(--f-mono); font-size: 10px;
+  letter-spacing: 0.22em; color: var(--ash);
+  text-transform: uppercase; width: 40%;
+}
+.sp-specs-table td.val { font-family: var(--f-display); font-weight: 300; font-size: 15px; color: var(--slate); }
+
+.sp-cta-row { margin-top: 32px; display: flex; gap: 12px; flex-wrap: wrap; }
+
+/* Comparison */
+.compare-table {
+  max-width: var(--max); margin: 0 auto; padding: 0 var(--pad);
+}
+.compare-scroll { overflow-x: auto; }
+.compare {
+  width: 100%; min-width: 780px;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+.compare th, .compare td {
+  padding: 18px 20px;
+  text-align: left;
+  border-bottom: 1px solid rgba(47,54,64,0.08);
+}
+.compare th {
+  font-family: var(--f-mono); font-size: 11px;
+  letter-spacing: 0.18em; color: var(--teal-deep);
+  text-transform: uppercase; font-weight: 400;
+  background: var(--parchment);
+}
+.compare td.sp-col .name { font-family: var(--f-display); font-weight: 300; font-size: 18px; }
+.compare td.sp-col .mean { font-family: var(--f-serif); font-style: italic; color: var(--stone); font-size: 12px; }
+.compare tr:hover td { background: var(--parchment); }
+
+.custom-note {
+  max-width: 800px; margin: 0 auto; padding: 0 var(--pad); text-align: center;
+}
+</style>
+</head>
+<body>
+
+<section class="page-hero">
+  <div class="eyebrow reveal">§ Collection</div>
+  <h1 class="reveal">Four voices, one forest.</h1>
+  <p class="sub reveal">
+    All four AURALIS speakers share the same philosophy — solid tonewood, traditional joinery,
+    crossovers tuned by hand. What changes is the room they are made for, and the music you
+    plan to hear in it.
+  </p>
+</section>
+
+<section class="section">
+  <div class="collection-grid" id="grid"></div>
+</section>
+
+<section class="section alt">
+  <div class="compare-table">
+    <div class="reveal" style="margin-bottom: 40px;">
+      <div class="section-num">02 — Side by Side</div>
+      <h2 class="h1" style="max-width: 16ch;">Compare at a glance.</h2>
+    </div>
+    <div class="compare-scroll reveal">
+      <table class="compare" id="compare-table"></table>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="custom-note reveal">
+    <div class="section-num">03 — Bespoke</div>
+    <h2 class="h1" style="max-width: 18ch; margin: 0 auto;">Something else in mind?</h2>
+    <p class="body-lg" style="margin: 32px auto 36px; text-align: left;">
+      We accept commissions for alternate wood species, custom finishes, non-standard
+      dimensions and special driver configurations. Every bespoke order begins with a
+      conversation — about your room, your music, and what you want to hear.
+    </p>
+    <a href="consultation.html" class="btn btn-primary">Begin a Consultation <span class="arrow">→</span></a>
+  </div>
+</section>
+
+<script src="assets/shared.js"></script>
+<script src="assets/data.js"></script>
+<script>
+AURALIS.initPage('collection');
+
+const grid = document.getElementById('grid');
+
+function renderItem(s) {
+  return `
+    <article class="speaker-item" id="${s.id}" data-id="${s.id}">
+      <div class="visual-wrap">
+        ${s.flagship ? '<div class="flagship-tag">Flagship</div>' : ''}
+        ${renderSpeakerVisual(s)}
+      </div>
+      <div class="sp-head">
+        <div>
+          <div class="sp-name">${s.name}</div>
+          <div class="sp-mean">${s.meaning}</div>
+        </div>
+        <div class="sp-price">$${s.price.toLocaleString()} / pair</div>
+      </div>
+      <div class="sp-meta-row">
+        <span class="sp-meta-chip">${s.type}</span>
+        <span class="sp-meta-chip">${s.wood}</span>
+        <span class="sp-meta-chip">${s.freq}</span>
+      </div>
+      <button class="sp-expand-btn">
+        <span class="open-label">View Details</span>
+        <span class="close-label" style="display:none;">Close</span>
+        <span class="arr">+</span>
+      </button>
+      <div class="sp-detail">
+        <div>
+          <p class="sp-description">${s.description}</p>
+          <div class="sp-ideal">
+            <div class="ilabel">Ideal For</div>
+            <p>${s.ideal}</p>
+          </div>
+          <div class="sp-cta-row">
+            <a href="wood.html#${s.woodId}" class="btn btn-secondary">About ${s.wood}</a>
+            <a href="consultation.html" class="btn btn-primary">Inquire <span class="arrow">→</span></a>
+          </div>
+        </div>
+        <div>
+          <table class="sp-specs-table">
+            <tr><td class="lab">Drivers</td><td class="val">${s.drivers}</td></tr>
+            <tr><td class="lab">Frequency</td><td class="val">${s.freq}</td></tr>
+            <tr><td class="lab">Sensitivity</td><td class="val">${s.sensitivity}</td></tr>
+            <tr><td class="lab">Impedance</td><td class="val">${s.impedance}</td></tr>
+            <tr><td class="lab">Power</td><td class="val">${s.power}</td></tr>
+            <tr><td class="lab">Weight</td><td class="val">${s.weight}</td></tr>
+            <tr><td class="lab">Finish</td><td class="val">${s.finish}</td></tr>
+            <tr><td class="lab">Wood</td><td class="val">${s.wood}</td></tr>
+          </table>
+        </div>
+      </div>
+    </article>
+  `;
+}
+grid.innerHTML = AURALIS_SPEAKERS.map(renderItem).join('');
+
+grid.querySelectorAll('.speaker-item').forEach(item => {
+  const btn = item.querySelector('.sp-expand-btn');
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const wasOpen = item.classList.contains('open');
+    grid.querySelectorAll('.speaker-item.open').forEach(o => {
+      o.classList.remove('open');
+      o.querySelector('.open-label').style.display = '';
+      o.querySelector('.close-label').style.display = 'none';
+    });
+    if (!wasOpen) {
+      item.classList.add('open');
+      item.querySelector('.open-label').style.display = 'none';
+      item.querySelector('.close-label').style.display = '';
+      setTimeout(() => item.scrollIntoView({behavior:'smooth', block:'start'}), 50);
+    }
+  });
+});
+
+// Auto-open from hash
+if (location.hash) {
+  const id = location.hash.slice(1);
+  const target = document.getElementById(id);
+  if (target) setTimeout(() => target.querySelector('.sp-expand-btn').click(), 200);
+}
+
+// Compare table
+const t = document.getElementById('compare-table');
+t.innerHTML = `
+  <thead>
+    <tr>
+      <th>Speaker</th><th>Type</th><th>Wood</th><th>Frequency</th><th>Sensitivity</th><th>Weight</th><th style="text-align:right;">Price</th>
+    </tr>
+  </thead>
+  <tbody>
+    ${AURALIS_SPEAKERS.map(s => `
+      <tr>
+        <td class="sp-col"><div class="name">${s.name}</div><div class="mean">${s.meaning}</div></td>
+        <td>${s.type}</td>
+        <td>${s.wood}</td>
+        <td>${s.freq}</td>
+        <td>${s.sensitivity}</td>
+        <td>${s.weight}</td>
+        <td style="text-align:right; font-family: var(--f-mono); color: var(--teal-deep);">$${s.price.toLocaleString()}</td>
+      </tr>
+    `).join('')}
+  </tbody>
+`;
+</script>
+
+</body>
+</html>
