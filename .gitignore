@@ -3,4 +3,7 @@ supabase/.temp/
 
 # Design handoff bundles from claude.ai/design — keep locally, don't commit
 auralis-website/
+auralis-websitenew/
 *-handoff.zip
+Auralis Website*.zip
+AURALIS Homepage.html
