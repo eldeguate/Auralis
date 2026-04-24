@@ -118,8 +118,8 @@ window.AURALIS_WOODS = [
 // Real product imagery — prefer bundled resources when available
 const R = (typeof window !== 'undefined' && window.__resources) || {};
 const SPEAKER_IMAGES = {
-  kuhul: R.spKuhul || 'assets/img/speaker-kuhul.png',
-  ixchel: R.spIxchel || 'assets/img/speaker-ixchel.png',
+  kuhul: R.spKuhul || 'assets/img/speaker-kuhul.jpg',
+  ixchel: R.spIxchel || 'assets/img/speaker-ixchel.jpg',
   balam: R.spBalam || 'assets/img/speaker-balam.jpg',
   tzikin: R.spTzikin || 'assets/img/speaker-tzikin.png',
 };
