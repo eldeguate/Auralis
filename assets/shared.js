@@ -13,6 +13,7 @@ function renderNav(active) {
     { href: 'story.html', label: 'Our Story', key: 'story' },
     { href: 'wood.html', label: 'The Wood', key: 'wood' },
     { href: 'collection.html', label: 'Collection', key: 'collection' },
+    { href: 'collection.html#bespoke', label: 'Bespoke', key: 'bespoke' },
     { href: 'contact.html', label: 'Contact', key: 'contact' },
   ];
   const nav = document.createElement('nav');
@@ -54,6 +55,7 @@ function renderFooter() {
           <li><a href="story.html">Our Story</a></li>
           <li><a href="wood.html">The Wood</a></li>
           <li><a href="collection.html">Collection</a></li>
+          <li><a href="collection.html#bespoke">Bespoke</a></li>
           <li><a href="consultation.html">Find Your Sound</a></li>
         </ul>
       </div>
