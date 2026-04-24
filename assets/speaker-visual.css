@@ -95,3 +95,25 @@
 
 /* Detail view — larger */
 .speaker-detail .sp-visual { aspect-ratio: 4/5; }
+
+/* Multi-photo cross-fade (used by TZ'IKIN powered pair) */
+.sp-visual.multi .sp-photo {
+  position: absolute;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  animation: sp-photo-cycle 8s ease-in-out infinite;
+}
+.sp-visual.multi .sp-photo-0 { animation-delay: 0s; }
+.sp-visual.multi .sp-photo-1 { animation-delay: 4s; }
+.sp-visual.multi:hover .sp-photo {
+  transform: translate(-50%, calc(-50% - 4px)) scale(1.02);
+}
+@keyframes sp-photo-cycle {
+  0%, 45% { opacity: 1; }
+  50%, 95% { opacity: 0; }
+  100% { opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sp-visual.multi .sp-photo { animation: none; }
+  .sp-visual.multi .sp-photo-1 { opacity: 0; }
+}

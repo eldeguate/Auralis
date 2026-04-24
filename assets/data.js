@@ -121,15 +121,22 @@ const SPEAKER_IMAGES = {
   kuhul: R.spKuhul || 'assets/img/speaker-kuhul.jpg',
   ixchel: R.spIxchel || 'assets/img/speaker-ixchel.jpg',
   balam: R.spBalam || 'assets/img/speaker-balam.jpg',
-  tzikin: R.spTzikin || 'assets/img/speaker-tzikin.png',
+  tzikin: R.spTzikin || ['assets/img/speaker-tzikin-1.jpg', 'assets/img/speaker-tzikin-2.jpg'],
 };
 
 window.renderSpeakerVisual = function(speaker, opts = {}) {
   const img = SPEAKER_IMAGES[speaker.id];
+  const tag = `<div class="sp-tag mono">${speaker.woodId.toUpperCase()} · ${speaker.type.split(' ')[0].toUpperCase()}</div>`;
+  if (Array.isArray(img)) {
+    const photos = img.map((src, i) =>
+      `<img class="sp-photo sp-photo-${i}" src="${src}" alt="${speaker.name} — ${speaker.type}" />`
+    ).join('');
+    return `<div class="sp-visual multi" data-wood="${speaker.woodId}">${photos}${tag}</div>`;
+  }
   return `
     <div class="sp-visual" data-wood="${speaker.woodId}">
       <img class="sp-photo" src="${img}" alt="${speaker.name} — ${speaker.type}" />
-      <div class="sp-tag mono">${speaker.woodId.toUpperCase()} · ${speaker.type.split(' ')[0].toUpperCase()}</div>
+      ${tag}
     </div>
   `;
 };
